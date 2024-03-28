@@ -34,10 +34,11 @@ export class RegistrationComponent implements OnInit {
     }
     const userObj: IUser = {
       psw: this.psw,
+      cardNumber: this.cardNumber,
       login: this.login,
       email: this.email
     }
-    //Пользователь есть/нет
+
     if (!this.authService.isUserExists(userObj)){
       this.authService.setUser(userObj);
       this.messageService.add({severity:'success', summary: 'Успешно!', detail: 'Регистрация выполнена!'});

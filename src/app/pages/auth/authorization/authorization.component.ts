@@ -63,7 +63,7 @@ export class AuthorizationComponent implements OnInit, OnChanges, OnDestroy {
     const authUser: IUser ={
       psw: this.psw,
       login: this.login,
-      // cardNumber: this.cardNumber
+      cardNumber: this.cardNumber
     }
     if (this.authService.checkUser(authUser)) {
       this.router.navigate(['tickets/tickets-list']);
