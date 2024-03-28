@@ -50,7 +50,7 @@ export class AuthorizationComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['inputProp']){
       const preValue = changes['inputProp'].previousValue;
       console.log('prevValue', preValue)
-      // выполнить что-то при первичном изменении св-ва
+
       if (changes['inputProp'].firstChange){
         console.log('first changes')
       }
