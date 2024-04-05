@@ -16,6 +16,7 @@ export class TicketsComponent implements OnInit {
   constructor(private ticketService: TicketService) { }
 
   ngOnInit(): void {
+
     this.tourUnsubscriber = this.ticketService.getTicketTypeObservable().subscribe((data:ITourTypeSelect) =>
     {console.log('data', data) });
   }

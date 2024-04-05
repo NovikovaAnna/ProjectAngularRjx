@@ -10,7 +10,7 @@ describe('RegistrationComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ RegistrationComponent ]
     })
-      .compileComponents();
+    .compileComponents();
 
     fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
@@ -21,4 +21,3 @@ describe('RegistrationComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-

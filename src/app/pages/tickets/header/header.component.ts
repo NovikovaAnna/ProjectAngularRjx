@@ -14,6 +14,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() menuType: IMenuType;
   private  settingsActive = false;
   items: MenuItem[];
+  // Отображение даты
+  time: Date;
   private timerInterval: number;
   public user: IUser;
 
@@ -33,17 +35,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
 
     ];
-
+    // запись пользователя
     this.user = this.userService.getUser()
 
     this.timerInterval = window.setInterval(() =>
     {
       console.log('run')
-     ;
-    },)
+     this.time = new Date();
+    }, 1000)
 
   }
-
+  //Когда выходим компонент уничтожается, в избежании утечки памяти
   ngOnDestroy(): void{
     if (this.timerInterval){
       window.clearInterval(this.timerInterval)

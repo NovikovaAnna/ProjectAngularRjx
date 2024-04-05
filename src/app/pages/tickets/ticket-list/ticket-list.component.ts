@@ -38,10 +38,13 @@ export class TicketListComponent implements OnInit {
 
       }
     )
-
+    //сформировать подписку на ticketSubject
+    //1 вариант
     this.tourUnsubscriber = this.ticketService.ticketType$.subscribe((data: ITourTypeSelect) => {
       console.log('data', data)
-
+    //2 вариант
+    //this.tourUnsubscriber = this.ticketService.getTicketTypeObservable().subscribe((data:ITourTypeSelect) => {  console.log('data', data)  });
+    // в методе подписки на изменение типа тура добавлена логика обработки данных
       let ticketType: string;
       switch (data.value) {
         case "single":

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 
-import {MessageService} from "primeng/api";
 
 
 @Component({
@@ -11,13 +10,13 @@ import {MessageService} from "primeng/api";
 })
 export class AuthComponent implements OnInit {
 
-  userName = "Anna";
+  userName = "Elizabeth";
 
   constructor(private authService: AuthService) { }
   isTabCaching: boolean = false;
   someObj: any;
   obj = {a: 1};
-  textProp = "Ann"
+  textProp = "Eliza"
 
   ngOnInit(): void {
     this.someObj = this.obj;
@@ -29,4 +28,4 @@ export class AuthComponent implements OnInit {
     this.userName = "newValue" + randIndex
     // this.textProp = "someeedf";
   }
-}
+ }

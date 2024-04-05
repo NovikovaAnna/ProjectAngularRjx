@@ -19,13 +19,6 @@ export class SettingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subjectScope = this.testing.getSubject();
 
-    // const myObservable = this.testing.getSubject();
-    // // сразу получаем данные
-    // const unsubscribe = myObservable.subscribe((data) => {
-    //   console.log('***observer data', data)
-    // })
-    //
-    // unsubscribe.unsubscribe();
 
 
     // подписка

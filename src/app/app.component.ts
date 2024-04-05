@@ -7,7 +7,7 @@ import {ObservableExampleService} from "./services/testing/testing.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'ticketSales2024';
+  title = 'ticketSales2022';
   prop: string;
 
   constructor(private  testing: ObservableExampleService) {
@@ -17,22 +17,27 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(){
+    //Observable
+    //first subscriber
     const myObservable = this.testing.getObservable();
     myObservable.subscribe((data) =>{
-
+      //console.log('first myObservable data', data)
     })
-
+    //second subscriber
     myObservable.subscribe((data)=>{
-
+      //console.log('second myObservabledata', data)
     });
 
-
+    //Subject
     const mySubject = this.testing.getSubject();
+
+
+    //send subjectData
     mySubject.next('subject value');
 
-
+    //Behavior Subject
     const myBehavior = this.testing.getBehaviorSubject();
-    myBehavior.next('new data from behaviorSubject');
+    myBehavior.next('new data from behaviorSubject'); // стирает последнее дефолтное значение и ставит новое
     myBehavior.subscribe((data) =>{
       console.log('first data behaviorSubject', data)
     });

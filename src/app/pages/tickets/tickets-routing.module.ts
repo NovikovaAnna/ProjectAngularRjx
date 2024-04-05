@@ -12,11 +12,11 @@ const routes: Routes = [
         component: TicketListComponent
       },
       {
-        path: 'ticket/:id',
+        path: 'ticket/:id', //путь и параметр
         loadChildren: () => import('../ticket-info/ticket-info.module').then(m => m.TicketInfoModule)
       },
       {
-        path: 'setting',
+        path: 'setting', //настройки
         loadChildren: () => import('../setting/setting.module').then(m => m.SettingModule)
       }
     ]

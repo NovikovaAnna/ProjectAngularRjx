@@ -13,8 +13,8 @@ import {UserService} from "../../../services/user/user.service";
 })
 
 export class AuthorizationComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() inputProp = 'active';
-  @Input() inputObj: any;
+@Input() inputProp = 'active';
+@Input() inputObj: any;
 
 
 
@@ -46,11 +46,11 @@ export class AuthorizationComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('changes', changes)
-    // если мы хотим обработать предыдущее значение
+      // если мы хотим обработать предыдущее значение
     if (changes['inputProp']){
       const preValue = changes['inputProp'].previousValue;
       console.log('prevValue', preValue)
-
+      // выполнить что-то при первичном изменении св-ва
       if (changes['inputProp'].firstChange){
         console.log('first changes')
       }
@@ -58,7 +58,7 @@ export class AuthorizationComponent implements OnInit, OnChanges, OnDestroy {
     console.log(this.inputProp);
 
   }
-
+  //Проверка по авторизации (логин и пароль), если будет все ок, то переходим на страницу с турами
   onAuth(ev: Event): void{
     const authUser: IUser ={
       psw: this.psw,
@@ -67,9 +67,10 @@ export class AuthorizationComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (this.authService.checkUser(authUser)) {
       this.router.navigate(['tickets/tickets-list']);
+      // запись пользователя
       this.userService.setUser(authUser);
 
-    }
+      }
     else {
       this.messageService.add({severity:'error', summary: 'Неудача', detail: 'Неправильно введен логин или пароль'});
     }

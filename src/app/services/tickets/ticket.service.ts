@@ -1,30 +1,32 @@
 import { Injectable } from '@angular/core';
-import { TicketRestService } from "../rest/ticket-rest.service";
-import { Observable, Subject } from "rxjs";
-import { ITour } from "../../models/tours";
-import { ITourTypeSelect } from "../../models/tours";
+import {TicketRestService} from "../rest/ticket-rest.service";
+import {Observable, Subject} from "rxjs";
+import {ITour} from "../../models/tours"
+import {ITourTypeSelect} from "../../models/tours";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
-  private ticketSubject = new Subject<ITourTypeSelect>();
-
-  // Добавляем свойство ticketType$
-  ticketType$: Observable<ITourTypeSelect> = this.ticketSubject.asObservable();
 
   constructor(private ticketServiceRest: TicketRestService) { }
 
-  getTickets(): Observable<ITour[]> {
-    return this.ticketServiceRest.getTickets();
+  private ticketSubject = new Subject<ITourTypeSelect>()
+
+//Вызывает метод ticketServiceRest
+  getTickets(): Observable<ITour[]>{
+    return this.ticketServiceRest.getTickets()
   }
 
+  // 1 вариант доступа к Observable
+  readonly ticketType$ = this.ticketSubject.asObservable();
+
+  // 2 вариант доступа к Observable
   getTicketTypeObservable(): Observable<ITourTypeSelect> {
     return this.ticketSubject.asObservable();
   }
-
-  // Метод для обновления текущего типа билета
-  updateTicketType(tourType: ITourTypeSelect): void {
-    this.ticketSubject.next(tourType);
-  }
+  //
+  // updateTour(type:ITourTypeSelect): void {
+  //   this.ticketSubject.next(type);
+  // }
 }
