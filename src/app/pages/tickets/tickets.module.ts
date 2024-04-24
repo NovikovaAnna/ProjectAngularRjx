@@ -31,7 +31,8 @@ import {CalendarModule} from "primeng/calendar";
     MenubarModule,
     DropdownModule,
     InputTextModule,
-    CalendarModule
+    CalendarModule,
+    InputTextModule
   ]
 })
 export class TicketsModule { }

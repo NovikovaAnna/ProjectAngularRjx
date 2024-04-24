@@ -1,50 +1,43 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {TicketService} from "../../../services/tickets/ticket.service";
-import {ITour, ITourTypeSelect} from "../../../models/tours";
-import { Router} from "@angular/router";
-import {TiсketsStorageService} from "../../../services/tiсkets-storage/tiсkets-storage.service";
-import {BlockStyleDirective} from "../../../directive/block-style.directive";
-import {Subscription} from "rxjs";
-
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { TicketService } from "../../../services/tickets/ticket.service";
+import { ITour, ITourTypeSelect } from "../../../models/tours";
+import { Router } from "@angular/router";
+import { TiсketsStorageService } from "../../../services/tiсkets-storage/tiсkets-storage.service";
+import { BlockStyleDirective } from "../../../directive/block-style.directive";
+import { debounceTime, fromEvent, Subscription } from "rxjs";
 
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticket-list.component.html',
   styleUrls: ['./ticket-list.component.scss']
 })
-export class TicketListComponent implements OnInit {
+export class TicketListComponent implements OnInit, OnDestroy, AfterViewInit {
   tickets: ITour[];
   ticketsCopy: ITour[];
   renderComplete = false;
   tourUnsubscriber: Subscription;
+  searchTicketSub: Subscription;
+  ticketSearchValue: string;
+  loadCountBlock: boolean = true;
 
   @ViewChild('tourWrap', {read: BlockStyleDirective}) blockDirective: BlockStyleDirective;
   @ViewChild('tourWrap') tourWrap: ElementRef;
-
+  @ViewChild('ticketSearch') ticketSearch: ElementRef;
 
   constructor(private ticketService: TicketService,
               private router: Router,
               private ticketStorage: TiсketsStorageService) {}
 
-
-
-  //Подписаться на изменения, которые произойдут при запросе на сервер, параметром передается асинхронная операция (data)
   ngOnInit(): void {
     this.ticketService.getTickets().subscribe(
       (data) => {
-        this.tickets = data; //вставка нового шаблона
-        this.ticketsCopy = [...this.tickets] //содержит все данные
-        this.ticketStorage.setStorage(data); // запрос на тур записывается
-
+        this.tickets = data;
+        this.ticketsCopy = [...this.tickets];
+        this.ticketStorage.setStorage(data);
       }
-    )
-    //сформировать подписку на ticketSubject
-    //1 вариант
+    );
+
     this.tourUnsubscriber = this.ticketService.ticketType$.subscribe((data: ITourTypeSelect) => {
-      console.log('data', data)
-    //2 вариант
-    //this.tourUnsubscriber = this.ticketService.getTicketTypeObservable().subscribe((data:ITourTypeSelect) => {  console.log('data', data)  });
-    // в методе подписки на изменение типа тура добавлена логика обработки данных
       let ticketType: string;
       switch (data.value) {
         case "single":
@@ -56,53 +49,58 @@ export class TicketListComponent implements OnInit {
         case "all":
           this.tickets = [...this.ticketsCopy];
           break;
-
       }
       if (data.date) {
         const dateWithoutTime = new Date(data.date).toISOString().split('T');
-        const dateValue = dateWithoutTime[0]
-        console.log('dateValue',dateValue)
+        const dateValue = dateWithoutTime[0];
         this.tickets = this.ticketsCopy.filter((el) => el.date === dateValue);
       }
 
-      //this.tickets добавлен метод директивы
       setTimeout(() => {
-
         this.blockDirective.updateItems();
-
-        this.blockDirective.initStyle(0);  // сбрасываем индекс на 0 элемент
+        this.blockDirective.initStyle(0);
       });
     });
   }
 
-  //выполняется отписка
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.tourUnsubscriber.unsubscribe();
+    this.searchTicketSub.unsubscribe();
   }
 
-  ngAfterViewInit(){
-
+  ngAfterViewInit(): void {
+    const fromEventObserver = fromEvent(this.ticketSearch.nativeElement,'keyup');
+    this.searchTicketSub = fromEventObserver.pipe(
+      debounceTime(200)).subscribe(() => {
+      if (this.ticketSearchValue) {
+        const searchValueLower = this.ticketSearchValue.toLowerCase(); // Приведение к нижнему регистру
+        this.tickets = this.ticketsCopy.filter((el) => el.name.toLowerCase().includes(searchValueLower)); // Поиск независимо от регистра
+      } else {
+        this.tickets = [...this.ticketsCopy];
+      }
+    });
   }
-  goToTicketInfoPage(item: ITour){
-    this.router.navigate([`/tickets/ticket/${item.id}`])
+
+  goToTicketInfoPage(item: ITour): void {
+    this.router.navigate([`/tickets/ticket/${item.id}`]).then(r => {});
   }
 
-  directiveRenderComplete(ev: boolean){
+  directiveRenderComplete(ev: boolean): void {
     const el: HTMLElement = this.tourWrap.nativeElement;
     el.setAttribute('style', 'background-color: #f5f5dc')
     this.blockDirective.initStyle(0)
     this.renderComplete = true
   }
-// поиск туров
-  findTours(ev: Event):void{
-    const searchValue = (<HTMLInputElement>ev.target).value;
 
-    if(searchValue){
-      this.tickets = this.ticketsCopy.filter((el) => el.name.includes(searchValue));
-    }
-    else {
+  findTours(ev: Event): void {
+    const searchValue = (<HTMLInputElement>ev.target).value;
+    if (searchValue) {
+      const searchValueLower = searchValue.toLowerCase();
+      this.tickets = this.ticketsCopy.filter((el) => el.name.toLowerCase().includes(searchValueLower));
+    } else {
       this.tickets = [...this.ticketsCopy]
     }
   }
-
 }
+
+

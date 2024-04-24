@@ -7,8 +7,9 @@ import {ObservableExampleService} from "./services/testing/testing.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'ticketSales2022';
+  title = 'ticketSales2024';
   prop: string;
+  private config: any;
 
   constructor(private  testing: ObservableExampleService) {
     testing.initObservable()
@@ -17,6 +18,8 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(){
+    this.config.configLoad()
+
     //Observable
     //first subscriber
     const myObservable = this.testing.getObservable();
@@ -30,6 +33,8 @@ export class AppComponent implements OnInit {
 
     //Subject
     const mySubject = this.testing.getSubject();
+
+    //удалены подписки
 
 
     //send subjectData
