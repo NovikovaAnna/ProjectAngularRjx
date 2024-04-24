@@ -8,8 +8,9 @@ export interface ITour {
   type: string,
   date: string
 }
+// задание практика 1 rjx
 export interface ITourTypeSelect {
   label?: string,
   value?: string,
-  date?: string
+  date?: string,
 }

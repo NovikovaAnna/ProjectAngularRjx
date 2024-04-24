@@ -16,9 +16,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   items: MenuItem[];
   // Отображение даты
   time: Date;
-  private timerInterval: number;
-  public user: IUser;
+  user: IUser | null;
 
+  private settingActive = false;
+  private timerInterval: number;
+
+  // public user: IUser;
 
 
   constructor(private userService: UserService) { }

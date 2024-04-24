@@ -11,7 +11,7 @@ import {TicketService} from "../../services/tickets/ticket.service";
 })
 export class TicketsComponent implements OnInit {
   selectedType: IMenuType;
-  private tourUnsubscriber: Subscription;
+  private tourUnsubscriber: Subscription; // создан tourUnsubscriber: Subscription
 
   constructor(private ticketService: TicketService) { }
 
