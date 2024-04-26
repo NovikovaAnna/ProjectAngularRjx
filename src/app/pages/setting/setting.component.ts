@@ -1,8 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { ObservableExampleService } from "../../services/testing/testing.service";
-import {take, takeUntil} from "rxjs/operators"; // Добавлен оператор take для использования в методе pipe
-import { Subscription, Subject } from "rxjs";
-import { SettingService } from "src/app/services/setting/setting.service"; // Импортирован сервис SettingService
+import {ObservableExampleService} from "../../services/testing/testing.service";
+import {Subject, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-setting',
@@ -10,30 +8,31 @@ import { SettingService } from "src/app/services/setting/setting.service"; // И
   styleUrls: ['./setting.component.scss']
 })
 export class SettingComponent implements OnInit, OnDestroy {
+  private subjectScope: Subject<string>;
+  private  subjectUnsubscribe: Subscription;
 
 
-  subjectForUnsubscribe = new Subject();
-  constructor(private testing: ObservableExampleService,
-              private settingsService: SettingService) { // Добавлен импорт и инъекция SettingService
+  constructor(private testing : ObservableExampleService) {
 
   }
 
   ngOnInit(): void {
+    this.subjectScope = this.testing.getSubject();
 
-    this.settingsService.loadUserSettings().pipe(takeUntil(this.subjectForUnsubscribe)).subscribe((data: any) => {
-      console.log('settings data', data);
-    });
 
-    this.settingsService.getSettingsSubjectObservable().pipe(takeUntil(this.subjectForUnsubscribe)).subscribe((data: any) => { // Исправлен синтаксис take
-      console.log('settings data from subject', data);
+
+    // подписка
+    this.subjectUnsubscribe = this.subjectScope.subscribe((data) => {
+       console.log('***data', data)
     });
+    //отправляем данные
+    this.subjectScope.next('subData value');
+
   }
-
-
-
-
+  // Отписка
   ngOnDestroy() {
-    this.subjectForUnsubscribe.next(true);
-    this.subjectForUnsubscribe.complete();
+    this.subjectUnsubscribe.unsubscribe()
   }
+
+
 }
