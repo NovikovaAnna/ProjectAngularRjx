@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {AuthComponent} from "../auth/auth.component";
 import {TicketsComponent} from "./tickets.component";
 import {TicketListComponent} from "./ticket-list/ticket-list.component";
+import {SettingComponent} from "../setting/setting.component";
 
 const routes: Routes = [
   { path: '', component: TicketsComponent,

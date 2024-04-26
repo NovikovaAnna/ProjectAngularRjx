@@ -13,3 +13,9 @@ export interface ITourTypeSelect {
   value?: string,
   date?: string
 }
+
+export class INearestTour {
+}
+
+export class ITourLocation {
+}
